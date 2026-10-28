@@ -1,7 +1,5 @@
 # Die Material System
 
-Copiar `Assets/Scripts/DiceMaterials` dentro de tu proyecto Unity.
-
 ## Estructura
 
 ```
