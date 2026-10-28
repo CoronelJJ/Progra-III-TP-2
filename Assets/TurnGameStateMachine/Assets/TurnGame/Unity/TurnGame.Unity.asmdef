@@ -1,0 +1,17 @@
+{
+    "name": "TurnGame.Unity",
+    "rootNamespace": "TurnGame.Unity",
+    "references": [
+        "TurnGame.Core",
+        "TurnGame.Flow"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

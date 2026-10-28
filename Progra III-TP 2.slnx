@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Project Path="DiceMaterials.Tests.EditMode.csproj" />
+  <Project Path="DiceMaterials.Core.csproj" />
+  <Project Path="DiceMaterials.Runtime.csproj" />
+  <Project Path="TurnGame.Core.csproj" />
+  <Project Path="TurnGame.Tests.EditMode.csproj" />
+  <Project Path="TurnGame.Flow.csproj" />
+  <Project Path="TurnGame.Unity.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="DiceMaterials.Editor.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>
