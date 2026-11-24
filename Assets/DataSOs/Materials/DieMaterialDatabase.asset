@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423582311c5a3a84eb96003366aec378, type: 3}
+  m_Name: DieMaterialDatabase
+  m_EditorClassIdentifier: DiceMaterials.Runtime::DiceMaterials.Runtime.DieMaterialDatabase
+  materials:
+  - {fileID: 11400000, guid: d61375d9297fe1949aa80b67ec4a1bac, type: 2}
+  - {fileID: 11400000, guid: ccbd5e2a56a73d04cb6beac08d4a1c78, type: 2}
+  - {fileID: 11400000, guid: f9ce83fab4324774fa7dc01671453573, type: 2}
+  - {fileID: 11400000, guid: 268aab2f6c5097349be95d8f9b1b0e70, type: 2}
+  - {fileID: 11400000, guid: f1dbfb31af1885444a1cd5c4561e138d, type: 2}
+  - {fileID: 11400000, guid: 04c9dcc53022c5b4f9acaea56afa4fe6, type: 2}
+  - {fileID: 11400000, guid: 908f38f4a830d944ba6c4d7c576136a4, type: 2}
+  - {fileID: 11400000, guid: 4bccca96b419d1840a3896bbeade0f0f, type: 2}
+  - {fileID: 11400000, guid: 245a6dae447e3694cb1975008cb04612, type: 2}
+  nextId: 10

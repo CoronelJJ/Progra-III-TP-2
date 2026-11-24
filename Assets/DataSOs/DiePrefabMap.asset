@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f901e00f42bfefa46a5064d614548703, type: 3}
+  m_Name: DiePrefabMap
+  m_EditorClassIdentifier: Assembly-CSharp::DiceMaterials.Runtime.DiePrefabMapSO
+  entries:
+  - faceCount: 6
+    prefab: {fileID: 4010584642897368349, guid: 96b620f8166421444b1b8df75ca03bdf, type: 3}

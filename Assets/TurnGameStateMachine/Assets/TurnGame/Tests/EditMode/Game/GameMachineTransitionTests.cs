@@ -12,7 +12,7 @@ namespace TurnGame.Tests.Game
     [TestFixture]
     public class GameMachineTransitionTests
     {
-        private GameMachineHarness _h;
+        private GameMachineHarness _h; //Clase la simulacion de eventos del broker y estados en orden para testeo. 
 
         [SetUp]
         public void SetUp()

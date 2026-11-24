@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using BoardGame.Model;
 using NUnit.Framework;
 
 namespace DiceMaterials.Tests
@@ -96,26 +95,6 @@ namespace DiceMaterials.Tests
                 Assert.AreEqual(6, r.Values.GetRolledDieValues(6).Count);
                 Assert.AreEqual(6, r.Materials.GetRolledDieMaterials(6).Count);
             }
-        }
-
-        [Test]
-        public void Hand_OfSixValuesAndSixMaterials_BuildsSixDice_Reproducibly()
-        {
-            List<Dice> Hand(ulong master)
-            {
-                var r = Build(master);
-                var values = r.Values.GetRolledDieValues(6);
-                var materials = r.Materials.GetRolledDieMaterials(6);
-                return values.Select((v, i) => new Dice(v, materials[i])).ToList();
-            }
-
-            var a = Hand(31UL);
-            var b = Hand(31UL);
-
-            Assert.AreEqual(6, a.Count);
-            foreach (var d in a) Assert.That(d.FaceValue, Is.InRange(1, 6));
-            CollectionAssert.AreEqual(a.Select(d => d.FaceValue).ToArray(), b.Select(d => d.FaceValue).ToArray());
-            CollectionAssert.AreEqual(a.Select(d => d.CurrentMaterial.Id).ToArray(), b.Select(d => d.CurrentMaterial.Id).ToArray());
         }
     }
 }

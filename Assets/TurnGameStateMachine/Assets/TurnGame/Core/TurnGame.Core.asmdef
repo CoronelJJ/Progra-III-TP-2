@@ -1,7 +1,9 @@
 {
     "name": "TurnGame.Core",
     "rootNamespace": "TurnGame.Core",
-    "references": [],
+    "references": [
+        "GUID:9a4b7b4481e5e4841b048bc474e75343"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

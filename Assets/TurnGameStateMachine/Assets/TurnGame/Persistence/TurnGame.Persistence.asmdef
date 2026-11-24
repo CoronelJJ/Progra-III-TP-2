@@ -1,0 +1,14 @@
+{
+    "name": "TurnGame.Persistence",
+    "rootNamespace": "TurnGame.Persistence",
+    "references": [ "TurnGame.Core", "DiceMaterials.Core", "VContainer" ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

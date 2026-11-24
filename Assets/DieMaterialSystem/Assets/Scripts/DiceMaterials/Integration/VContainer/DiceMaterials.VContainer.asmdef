@@ -1,0 +1,19 @@
+{
+    "name": "DiceMaterials.VContainer",
+    "rootNamespace": "DiceMaterials.Integration",
+    "references": [
+        "DiceMaterials.Core",
+        "DiceMaterials.Runtime",
+        "VContainer",
+        "NewAssembly"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

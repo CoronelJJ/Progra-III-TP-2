@@ -4,6 +4,10 @@ namespace DiceMaterials.Tests
     {
         public int Id { get; }
         public string Name { get; }
-        public FakePiece(int id, string name = null) { Id = id; Name = name ?? $"P{id}"; }
+        public int DiceRequired { get; }
+        public FakePiece(int id, string name = null, int diceRequired = 1)
+        {
+            Id = id; Name = name ?? $"P{id}"; DiceRequired = diceRequired;
+        }
     }
 }

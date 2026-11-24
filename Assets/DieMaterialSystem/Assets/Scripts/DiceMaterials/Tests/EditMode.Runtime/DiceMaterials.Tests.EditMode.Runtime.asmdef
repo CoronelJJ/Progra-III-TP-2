@@ -1,0 +1,14 @@
+{
+    "name": "DiceMaterials.Tests.EditMode.Runtime",
+    "rootNamespace": "DiceMaterials.Tests",
+    "references": [ "DiceMaterials.Core", "DiceMaterials.Runtime" ],
+    "includePlatforms": [ "Editor" ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [ "nunit.framework.dll" ],
+    "autoReferenced": false,
+    "defineConstraints": [ "UNITY_INCLUDE_TESTS" ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
