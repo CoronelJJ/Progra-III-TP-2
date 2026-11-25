@@ -12,135 +12,425 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b86d8223d75a9241a028b767d99c49e, type: 3}
   m_Name: test2
   m_EditorClassIdentifier: Assembly-CSharp::BoardGame.Levels.LevelBlueprint
-  width: 6
-  height: 7
+  width: 10
+  height: 10
   cells:
   - playable: 1
     effect:
       rid: -2
+    dice:
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: dc9a643b7441b484abc956bdcd48ec5c, type: 2}
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice:
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 687be21069d93e548979f9d7689b212e, type: 2}
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
   - playable: 0
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
-  - playable: 0
-    effect:
-      rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
-  - playable: 0
-    effect:
-      rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice:
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 51897e2a9c3d3444fa6f8dbd286100e9, type: 2}
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 51897e2a9c3d3444fa6f8dbd286100e9, type: 2}
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 51897e2a9c3d3444fa6f8dbd286100e9, type: 2}
   - playable: 1
     effect:
       rid: -2
+    dice:
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 51897e2a9c3d3444fa6f8dbd286100e9, type: 2}
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 51897e2a9c3d3444fa6f8dbd286100e9, type: 2}
+    - material: {fileID: 11400000, guid: 73c4ae79b38581641aa6077e1abc6035, type: 2}
+      face: {fileID: 11400000, guid: 51897e2a9c3d3444fa6f8dbd286100e9, type: 2}
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
   - playable: 1
     effect:
       rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
+  - playable: 1
+    effect:
+      rid: -2
+    dice: []
   baseStackLimit: 3
   references:
     version: 2

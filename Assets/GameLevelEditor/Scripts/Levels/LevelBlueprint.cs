@@ -91,7 +91,29 @@ namespace BoardGame.Levels
             }
 
             for (int i = 0; i < cells.Length; i++)
+            {
                 if (cells[i] == null) cells[i] = new CellData();
+                if (cells[i].dice == null) cells[i].dice = new System.Collections.Generic.List<DiceRecipe>();
+            }
+        }
+
+        /// <summary>Total de dados precolocados en el nivel (se calcula, no se guarda).</summary>
+        public int CountDice()
+        {
+            if (cells == null) return 0;
+            int count = 0;
+            for (int i = 0; i < cells.Length; i++)
+                if (cells[i] != null && cells[i].HasDice) count += cells[i].dice.Count;
+            return count;
+        }
+
+        public int CountCellsWithDice()
+        {
+            if (cells == null) return 0;
+            int count = 0;
+            for (int i = 0; i < cells.Length; i++)
+                if (cells[i] != null && cells[i].HasDice) count++;
+            return count;
         }
 
         public int CountPlayable()

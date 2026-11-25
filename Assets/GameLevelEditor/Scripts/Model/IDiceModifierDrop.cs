@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DiceMaterials.Runtime;
 
 namespace BoardGame.Model
 {
@@ -11,6 +12,6 @@ namespace BoardGame.Model
     public interface IDiceModifierDrop : IPlaceableDrop
     {
         // Aplica la transformación a cada dado presente en la cola de la celda destino.
-        void ApplyTo(IEnumerable<IDice> diceInCell);
+        void ApplyTo(IEnumerable<IDieData> diceInCell);
     }
 }

@@ -1,5 +1,5 @@
-namespace BoardGame.Model
-{
+//namespace BoardGame.Model
+//{
     /// <summary>
     /// Algo que efectivamente ocupa un lugar en la cola de una celda
     /// (a diferencia de los modificadores, que se consumen sin ocupar espacio).
@@ -10,4 +10,4 @@ namespace BoardGame.Model
         // Para dados: solo importa que compartan el mismo valor de cara.
         bool CanStackWith(IBoardPiece other);
     }
-}
+//}

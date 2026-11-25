@@ -1,4 +1,6 @@
 using UnityEngine;
+public enum MaterialUtilization { Play, Combination, Edit }
+
 
 namespace DiceMaterials.Runtime
 {
@@ -15,6 +17,8 @@ namespace DiceMaterials.Runtime
         [SerializeField] private int score = 1;
         [SerializeField, Min(0f)] private float multiplier = 1f;
         [SerializeField] private Material unityMaterial;
+        [SerializeField] private MaterialUtilization usability = MaterialUtilization.Play;
+        public MaterialUtilization Usability => usability;
 
         // Id: heredado de IdentifiedSO
         public string Name => materialName;

@@ -24,6 +24,14 @@ namespace DiceMaterials.Runtime
         public IFaceValue Face => face;
         public int Value => face.Value;
 
+        public string InstanceId => throw new NotImplementedException();
+
+        public bool CanStackWith(IBoardPiece other)
+        {
+            throw new NotImplementedException();
+        }
+
+
         public Sprite GetFaceSprite(FaceStyle style) => face.GetSprite(style);
 
         /// <summary>Devuelve true si hubo cambio (idempotente: el mismo SO no hace nada).</summary>

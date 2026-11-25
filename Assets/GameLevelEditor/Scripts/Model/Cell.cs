@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DiceMaterials.Runtime;
 using UnityEngine;
 
 namespace BoardGame.Model
@@ -33,7 +34,13 @@ namespace BoardGame.Model
 
         public void SetActive(bool active) => IsActive = active;
 
-        public void SetEffect(ICellEffect effect) => Effect = effect ?? new NullCellEffect();
+        public void SetEffect(ICellEffect effect)
+        {
+            // Un efecto bloqueante (obstáculos precolocados) no se puede reemplazar mientras siga activo.
+            if (Effect is ILockingCellEffect locking && locking.IsLocked) return;
+
+            Effect = effect ?? new NullCellEffect();
+        }
 
         public bool IsEmpty => _occupancy.Count == 0;
 
@@ -57,7 +64,7 @@ namespace BoardGame.Model
 
             switch (drop)
             {
-                case IDice dice:
+                case IDieData dice:
                     return QueryDice(dice, quantity);
 
                 case IDiceModifierDrop _:
@@ -77,7 +84,7 @@ namespace BoardGame.Model
             }
         }
 
-        private PlacementCheckResult QueryDice(IDice dice, int quantity)
+        private PlacementCheckResult QueryDice(IDieData dice, int quantity)
         {
             if (!Effect.CanAcceptPiece(this, dice))
                 return PlacementCheckResult.Rejected(this, RejectionReason.CellInactive);
@@ -110,13 +117,13 @@ namespace BoardGame.Model
         {
             switch (drop)
             {
-                case IDice dice:
+                case IDieData dice:
                     for (int i = 0; i < quantity; i++)
                         EnqueueDice(dice);
                     break;
 
                 case IDiceModifierDrop diceModifier:
-                    diceModifier.ApplyTo(_occupancy.OfType<IDice>().ToList());
+                    diceModifier.ApplyTo(_occupancy.OfType<IDieData>().ToList());
                     break;
 
                 case ICellModifierDrop cellModifier:
@@ -125,7 +132,7 @@ namespace BoardGame.Model
             }
         }
 
-        private void EnqueueDice(IDice dice)
+        private void EnqueueDice(IDieData dice)
         {
             _occupancy.Enqueue(dice);
             Effect.OnPieceEnter(this, dice);
@@ -172,8 +179,8 @@ namespace BoardGame.Model
         // Valor de frente ya modificado por el efecto de celda, listo para el evaluador.
         public int? GetEvaluableFrontValue()
         {
-            if (PeekFront() is IDice dice)
-                return Effect.ModifyValue(dice.FaceValue);
+            if (PeekFront() is IDieData dice)
+                return Effect.ModifyValue(dice.Value);
 
             return null;
         }

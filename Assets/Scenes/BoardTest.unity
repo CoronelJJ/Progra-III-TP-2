@@ -148,9 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 155c2c436ee87d04e881c7b121b045a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoardGame.View.BoardView
-  blueprint: {fileID: 11400000, guid: ac90e75be296bba478e197c883c12c16, type: 2}
+  blueprint: {fileID: 11400000, guid: caf17fda0ad45b0448cee7b86445b2f5, type: 2}
   cellPrefab: {fileID: 3324482009600536103, guid: 4b12d1e48f643fc4c82d7bc7142be89a, type: 3}
   buildOnStart: 1
+  logSummary: 1
+  dieViewPrefab: {fileID: 5707869785742638732, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+  dieScale: 1
   plane: 0
   cellSize: 1
   cellGap: 0.05
@@ -485,106 +488,67 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1446373887
-GameObject:
+--- !u!1001 &3180585136186190043
+PrefabInstance:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1446373889}
-  - component: {fileID: 1446373888}
-  m_Layer: 0
-  m_Name: GameScope
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1446373888
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1446373887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb066bc5c5624994ea49c79fff80463a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameScope
-  parentReference:
-    TypeName: 
-  autoRun: 1
-  autoInjectGameObjects: []
-  materialDb: {fileID: 11400000, guid: 6ce200b108376d6448b6ecaf65e6edf9, type: 2}
-  pieceDb: {fileID: 11400000, guid: d100ef7ac4056354d92a0d7bc95b4668, type: 2}
-  tierTable: {fileID: 11400000, guid: c0ece5d4b159e7249916b72bbd53e045, type: 2}
---- !u!4 &1446373889
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1446373887}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.13766, y: 0, z: -16.1571}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1933917195
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1933917197}
-  - component: {fileID: 1933917196}
-  m_Layer: 0
-  m_Name: VcontainerScope
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1933917196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1933917195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b2c62ac3bcd44fb9e09835581422057, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: VContainer::VContainer.Unity.LifetimeScope
-  parentReference:
-    TypeName: 
-  autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 0}
---- !u!4 &1933917197
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1933917195}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.13766, y: 0, z: -16.1571}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4507925543279883220, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_Name
+      value: DieEditorPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 4507925543279883220, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 19.18464
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 64.61234
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8657034170604571737, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cb6eb90dd9297c347b7bc4c6c69c4c0f, type: 3}
 --- !u!1001 &3212200356560506050
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -715,7 +679,6 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 7405114417937901852}
-  - {fileID: 1933917197}
-  - {fileID: 1446373889}
   - {fileID: 3212200356560506050}
   - {fileID: 17592805}
+  - {fileID: 3180585136186190043}

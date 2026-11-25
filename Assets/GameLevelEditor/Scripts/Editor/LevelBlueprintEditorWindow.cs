@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BoardGame.Model;
+using DiceMaterials.Runtime;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -15,13 +16,14 @@ namespace BoardGame.Levels.EditorTools
     /// </summary>
     public class LevelBlueprintEditorWindow : EditorWindow
     {
-        private enum Tool { Playable, Unplayable, Effect, EraseEffect, Inspect }
+        private enum Tool { Playable, Unplayable, Effect, EraseEffect, Dice, EraseDice, Inspect }
 
         private static readonly string[] ToolLabels =
-            { "Jugable", "No jugable", "Efecto", "Quitar efecto", "Inspeccionar" };
+            { "Jugable", "No jugable", "Efecto", "Quitar efecto", "Dados", "Quitar dados", "Inspeccionar" };
 
         private const int MaxSize = 64;
         private static readonly Vector2Int Invalid = new Vector2Int(-1, -1);
+        private static readonly Color ObstacleBackground = new Color(0.33f, 0.43f, 0.48f, 1f);
 
         [SerializeField] private LevelBlueprint _blueprint;
         [SerializeField] private Tool _tool = Tool.Playable;
@@ -30,10 +32,15 @@ namespace BoardGame.Levels.EditorTools
         [SerializeField] private int _pendingWidth = LevelBlueprint.DefaultSize;
         [SerializeField] private int _pendingHeight = LevelBlueprint.DefaultSize;
         [SerializeField] private Vector2Int _inspected = new Vector2Int(-1, -1);
+        [SerializeField] private DieMaterialSO _brushMaterial;
+        [SerializeField] private FaceValueSO _brushFace;
+        [SerializeField] private int _brushQuantity = 1;
 
         private Vector2 _gridScroll;
         private Vector2 _sidebarScroll;
         private List<Type> _effectTypes = new List<Type>();
+        private List<DieMaterialSO> _editMaterials = new List<DieMaterialSO>();
+        private List<FaceValueSO> _faces = new List<FaceValueSO>();
         private EffectBrush _brush;
         private SerializedObject _brushSO;
         private SerializedObject _blueprintSO;
@@ -41,6 +48,7 @@ namespace BoardGame.Levels.EditorTools
         private Vector2Int _lastPainted = new Vector2Int(-1, -1);
         private int _undoGroup;
         private GUIStyle _cellLabelStyle;
+        private GUIStyle _badgeStyle;
 
         // ------------------------------------------------------------------ apertura
 
@@ -56,17 +64,12 @@ namespace BoardGame.Levels.EditorTools
         }
 
         // Doble clic sobre un LevelBlueprint en el Project abre este editor.
-#if UNITY_6000_3_OR_NEWER
+        // Se usa Selection (el doble clic selecciona el asset primero) en vez de InstanceIDToObject /
+        // EntityIdToObject, que cambian según la versión de Unity.
         [OnOpenAsset(1)]
-        private static bool OnOpenAsset(EntityId entityId, int line)
+        private static bool OnOpenAsset(int instanceId, int line)
         {
-            var blueprint = EditorUtility.EntityIdToObject(entityId) as LevelBlueprint;
-#else
-[OnOpenAsset(1)]
-private static bool OnOpenAsset(int instanceId, int line)
-{
-    var blueprint = EditorUtility.EntityIdToObject(instanceId) as LevelBlueprint;
-#endif
+            var blueprint = Selection.activeObject as LevelBlueprint;
             if (blueprint == null) return false;
             Open(blueprint);
             return true;
@@ -77,6 +80,7 @@ private static bool OnOpenAsset(int instanceId, int line)
         private void OnEnable()
         {
             RefreshEffectTypes();
+            RefreshDiceAssets();
             Undo.undoRedoPerformed += OnUndoRedo;
 
             if (_blueprint == null && Selection.activeObject is LevelBlueprint selected)
@@ -109,10 +113,39 @@ private static bool OnOpenAsset(int instanceId, int line)
             _effectTypes = TypeCache.GetTypesDerivedFrom<ICellEffect>()
                 .Where(t => !t.IsAbstract && !t.IsInterface && !t.IsGenericType
                             && t != typeof(NullCellEffect)
+                            && !typeof(ILockingCellEffect).IsAssignableFrom(t)
                             && !typeof(UnityEngine.Object).IsAssignableFrom(t)
                             && t.GetConstructor(Type.EmptyTypes) != null)
                 .OrderBy(t => CellEffectStyle.GetDisplayName(t))
                 .ToList();
+        }
+
+        private void OnProjectChange()
+        {
+            RefreshDiceAssets();
+            Repaint();
+        }
+
+        // Materiales: solo los marcados Usability = Edit. Caras: todos los FaceValueSO del proyecto.
+        private void RefreshDiceAssets()
+        {
+            _editMaterials = AssetDatabase.FindAssets("t:DieMaterialSO")
+                .Select(g => AssetDatabase.LoadAssetAtPath<DieMaterialSO>(AssetDatabase.GUIDToAssetPath(g)))
+                .Where(m => m != null && m.Usability == MaterialUtilization.Edit)
+                .OrderBy(m => m.name)
+                .ToList();
+
+            _faces = AssetDatabase.FindAssets("t:FaceValueSO")
+                .Select(g => AssetDatabase.LoadAssetAtPath<FaceValueSO>(AssetDatabase.GUIDToAssetPath(g)))
+                .Where(f => f != null)
+                .OrderBy(f => f.Value)
+                .ThenBy(f => f.name)
+                .ToList();
+
+            if (_brushMaterial == null || !_editMaterials.Contains(_brushMaterial))
+                _brushMaterial = _editMaterials.FirstOrDefault();
+            if (_brushFace == null || !_faces.Contains(_brushFace))
+                _brushFace = _faces.FirstOrDefault();
         }
 
         private void SetBlueprint(LevelBlueprint blueprint)
@@ -334,11 +367,12 @@ private static bool OnOpenAsset(int instanceId, int line)
                     break;
 
                 case Tool.Unplayable:
-                    if (cell.playable || cell.effect != null)
+                    if (cell.playable || cell.effect != null || cell.HasDice)
                     {
                         RecordChange("Pintar no jugable");
                         cell.playable = false;
-                        cell.effect = null; // una celda fuera de la forma no lleva efecto
+                        cell.effect = null; // una celda fuera de la forma no lleva efecto ni dados
+                        cell.dice.Clear();
                         changed = true;
                     }
                     break;
@@ -348,6 +382,7 @@ private static bool OnOpenAsset(int instanceId, int line)
                     {
                         RecordChange("Pintar efecto");
                         cell.effect = CellData.CloneEffect(_brush.effect);
+                        cell.dice.Clear(); // sin combo efecto + dados
                         changed = true;
                     }
                     break;
@@ -357,6 +392,28 @@ private static bool OnOpenAsset(int instanceId, int line)
                     {
                         RecordChange("Quitar efecto");
                         cell.effect = null;
+                        changed = true;
+                    }
+                    break;
+
+                case Tool.Dice:
+                    if (cell.playable && _brushMaterial != null && _brushFace != null)
+                    {
+                        RecordChange("Pintar dados");
+                        bool append = Event.current != null && Event.current.shift;
+                        if (!append) cell.dice.Clear();
+                        for (int i = 0; i < Mathf.Max(1, _brushQuantity); i++)
+                            cell.dice.Add(new DiceRecipe { material = _brushMaterial, face = _brushFace });
+                        cell.effect = null; // sin combo efecto + dados
+                        changed = true;
+                    }
+                    break;
+
+                case Tool.EraseDice:
+                    if (cell.HasDice)
+                    {
+                        RecordChange("Quitar dados");
+                        cell.dice.Clear();
                         changed = true;
                     }
                     break;
@@ -389,7 +446,7 @@ private static bool OnOpenAsset(int instanceId, int line)
 
                     Color color = !cell.playable
                         ? CellEffectStyle.UnplayableColor
-                        : CellEffectStyle.GetColor(cell.effect);
+                        : (cell.HasDice ? ObstacleBackground : CellEffectStyle.GetColor(cell.effect));
                     EditorGUI.DrawRect(inner, color);
 
                     if (cell.playable && cell.effect != null && size >= 28f)
@@ -399,10 +456,62 @@ private static bool OnOpenAsset(int instanceId, int line)
                         GUI.Label(inner, name.Length <= 2 ? name : name.Substring(0, 2), _cellLabelStyle);
                     }
 
+                    DrawDiceInCell(inner, cell);
+
                     if (_inspected.x == x && _inspected.y == y)
                         DrawOutline(rect, new Color(0f, 0.9f, 1f, 1f));
                 }
             }
+        }
+
+        // El dado visible desde arriba es el último de la lista; el contador muestra cuántos hay apilados.
+        private void DrawDiceInCell(Rect inner, CellData cell)
+        {
+            if (!cell.playable || !cell.HasDice) return;
+
+            DiceRecipe top = cell.dice[cell.dice.Count - 1];
+            if (top == null) return;
+
+            var body = new Rect(inner.x + inner.width * 0.15f, inner.y + inner.height * 0.15f,
+                                inner.width * 0.7f, inner.height * 0.7f);
+            EditorGUI.DrawRect(body, GetMaterialTint(top.material));
+
+            if (top.face != null)
+            {
+                Sprite sprite = top.face.GetSprite(top.face.DefaultStyle);
+                if (sprite != null) DrawSprite(body, sprite);
+            }
+
+            if (cell.dice.Count > 1)
+            {
+                if (_badgeStyle == null)
+                {
+                    _badgeStyle = new GUIStyle(EditorStyles.miniBoldLabel) { alignment = TextAnchor.LowerRight };
+                    _badgeStyle.normal.textColor = Color.white;
+                }
+                var badge = new Rect(inner.xMax - 26f, inner.yMax - 15f, 26f, 15f);
+                EditorGUI.DrawRect(badge, new Color(0f, 0f, 0f, 0.6f));
+                GUI.Label(badge, "x" + cell.dice.Count, _badgeStyle);
+            }
+        }
+
+        private static Color GetMaterialTint(DieMaterialSO material)
+        {
+            if (material == null) return Color.magenta;
+            Material m = material.UnityMaterial;
+            if (m == null) return Color.gray;
+            if (m.HasProperty("_BaseColor")) return m.GetColor("_BaseColor");
+            if (m.HasProperty("_Color")) return m.GetColor("_Color");
+            return Color.white;
+        }
+
+        private static void DrawSprite(Rect rect, Sprite sprite)
+        {
+            Texture2D tex = sprite.texture;
+            if (tex == null) return;
+            Rect tr = sprite.textureRect;
+            var uv = new Rect(tr.x / tex.width, tr.y / tex.height, tr.width / tex.width, tr.height / tex.height);
+            GUI.DrawTextureWithTexCoords(rect, tex, uv);
         }
 
         private static void DrawOutline(Rect r, Color c)
@@ -426,6 +535,7 @@ private static bool OnOpenAsset(int instanceId, int line)
             EditorGUILayout.Space();
 
             if (_tool == Tool.Effect) DrawEffectPalette();
+            if (_tool == Tool.Dice) DrawDicePalette();
             if (_tool == Tool.Inspect) DrawInspectSection();
 
             EditorGUILayout.Space();
@@ -548,6 +658,131 @@ private static bool OnOpenAsset(int instanceId, int line)
             }
         }
 
+        private void DrawDicePalette()
+        {
+            EditorGUILayout.LabelField("Dados precolocados", EditorStyles.boldLabel);
+
+            if (_editMaterials.Count == 0)
+                EditorGUILayout.HelpBox("No hay DieMaterialSO con Usability = Edit.", MessageType.Warning);
+            else
+            {
+                int mi = Mathf.Max(0, _editMaterials.IndexOf(_brushMaterial));
+                mi = EditorGUILayout.Popup("Material", mi, _editMaterials.Select(m => m.name).ToArray());
+                _brushMaterial = _editMaterials[mi];
+            }
+
+            if (_faces.Count == 0)
+                EditorGUILayout.HelpBox("No hay FaceValueSO en el proyecto.", MessageType.Warning);
+            else
+            {
+                int fi = Mathf.Max(0, _faces.IndexOf(_brushFace));
+                fi = EditorGUILayout.Popup("Cara", fi, _faces.Select(f => f.Value + "  (" + f.name + ")").ToArray());
+                _brushFace = _faces[fi];
+            }
+
+            _brushQuantity = Mathf.Max(1, EditorGUILayout.IntField("Cantidad", _brushQuantity));
+            if (_brushQuantity > _blueprint.BaseStackLimit)
+                EditorGUILayout.HelpBox("La cantidad supera el límite de stack base (" + _blueprint.BaseStackLimit + ").",
+                    MessageType.Warning);
+
+            EditorGUILayout.HelpBox(
+                "Clic: reemplaza los dados de la celda. Shift + clic: agrega encima. " +
+                "El primero de la lista es el más cercano al tablero. " +
+                "Pintar dados quita el efecto de la celda (no se combinan).", MessageType.None);
+
+            if (GUILayout.Button("Refrescar listas")) RefreshDiceAssets();
+        }
+
+        private void DrawInspectDice(CellData cell)
+        {
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Dados (0 = más cerca del tablero)", EditorStyles.boldLabel);
+
+            int removeAt = -1;
+            int swapA = -1;
+            int swapB = -1;
+
+            for (int i = 0; i < cell.dice.Count; i++)
+            {
+                DiceRecipe d = cell.dice[i];
+                if (d == null) { d = new DiceRecipe(); cell.dice[i] = d; }
+
+                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Dado " + i, EditorStyles.miniBoldLabel);
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button("▲", GUILayout.Width(24f)) && i < cell.dice.Count - 1) { swapA = i; swapB = i + 1; }
+                if (GUILayout.Button("▼", GUILayout.Width(24f)) && i > 0) { swapA = i; swapB = i - 1; }
+                if (GUILayout.Button("✕", GUILayout.Width(24f))) removeAt = i;
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUI.BeginChangeCheck();
+                var mat = (DieMaterialSO)EditorGUILayout.ObjectField("Material", d.material, typeof(DieMaterialSO), false);
+                var face = (FaceValueSO)EditorGUILayout.ObjectField("Cara", d.face, typeof(FaceValueSO), false);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    RecordChange("Editar dado");
+                    d.material = mat;
+                    d.face = face;
+                    EditorUtility.SetDirty(_blueprint);
+                }
+
+                if (d.material == null || d.face == null)
+                    EditorGUILayout.HelpBox("Dado incompleto: se omitirá al construir el nivel.", MessageType.Warning);
+                else if (d.material.Usability != MaterialUsabilityEdit)
+                    EditorGUILayout.HelpBox("Este material no está marcado como Edit.", MessageType.Info);
+
+                EditorGUILayout.EndVertical();
+            }
+
+            if (removeAt >= 0)
+            {
+                RecordChange("Quitar dado");
+                cell.dice.RemoveAt(removeAt);
+                EditorUtility.SetDirty(_blueprint);
+            }
+            else if (swapA >= 0)
+            {
+                RecordChange("Reordenar dados");
+                DiceRecipe tmp = cell.dice[swapA];
+                cell.dice[swapA] = cell.dice[swapB];
+                cell.dice[swapB] = tmp;
+                EditorUtility.SetDirty(_blueprint);
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Agregar dado (pincel)"))
+            {
+                RecordChange("Agregar dado");
+                cell.dice.Add(new DiceRecipe { material = _brushMaterial, face = _brushFace });
+                cell.effect = null;
+                EditorUtility.SetDirty(_blueprint);
+            }
+            using (new EditorGUI.DisabledScope(cell.dice.Count == 0))
+            {
+                if (GUILayout.Button("Quitar todos"))
+                {
+                    RecordChange("Quitar dados");
+                    cell.dice.Clear();
+                    EditorUtility.SetDirty(_blueprint);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            if (cell.dice.Count > _blueprint.BaseStackLimit)
+                EditorGUILayout.HelpBox("Hay más dados que el límite de stack base (" + _blueprint.BaseStackLimit + ").",
+                    MessageType.Warning);
+
+            var values = new HashSet<int>();
+            foreach (DiceRecipe d in cell.dice)
+                if (d != null && d.face != null) values.Add(d.face.Value);
+            if (values.Count > 1)
+                EditorGUILayout.HelpBox("Valores de cara distintos en la misma celda: el editor lo permite, " +
+                                        "pero en partida normal no se podrían apilar.", MessageType.Info);
+        }
+
+        private const MaterialUtilization MaterialUsabilityEdit = MaterialUtilization.Edit;
+
         private void DrawInspectSection()
         {
             EditorGUILayout.LabelField("Celda seleccionada", EditorStyles.boldLabel);
@@ -567,12 +802,20 @@ private static bool OnOpenAsset(int instanceId, int line)
             {
                 RecordChange("Cambiar jugable");
                 cell.playable = playable;
-                if (!playable) cell.effect = null;
+                if (!playable) { cell.effect = null; cell.dice.Clear(); }
                 EditorUtility.SetDirty(_blueprint);
                 _blueprintSO.Update();
             }
 
             if (!cell.playable) return;
+
+            DrawInspectDice(cell);
+            if (cell.HasDice)
+            {
+                EditorGUILayout.HelpBox("Una celda con dados no lleva efecto. Quita los dados para asignar uno.",
+                    MessageType.None);
+                return;
+            }
 
             // Selector de efecto: "Sin efecto" + todos los autodetectados.
             var options = new List<string> { "Sin efecto" };
@@ -621,10 +864,13 @@ private static bool OnOpenAsset(int instanceId, int line)
                 BulkEdit("Todo jugable", c => c.playable = true);
 
             if (GUILayout.Button("Todo no jugable"))
-                BulkEdit("Todo no jugable", c => { c.playable = false; c.effect = null; });
+                BulkEdit("Todo no jugable", c => { c.playable = false; c.effect = null; c.dice.Clear(); });
 
             if (GUILayout.Button("Quitar todos los efectos"))
                 BulkEdit("Quitar todos los efectos", c => c.effect = null);
+
+            if (GUILayout.Button("Quitar todos los dados"))
+                BulkEdit("Quitar todos los dados", c => c.dice.Clear());
         }
 
         private void BulkEdit(string label, Action<CellData> edit)
@@ -642,6 +888,8 @@ private static bool OnOpenAsset(int instanceId, int line)
             int total = _blueprint.Width * _blueprint.Height;
             int playable = _blueprint.CountPlayable();
             EditorGUILayout.LabelField("Celdas jugables", playable + " / " + total);
+            EditorGUILayout.LabelField("Dados precolocados",
+                _blueprint.CountDice() + " en " + _blueprint.CountCellsWithDice() + " celdas");
 
             if (playable == 0)
                 EditorGUILayout.HelpBox("El nivel no tiene ninguna celda jugable.", MessageType.Warning);

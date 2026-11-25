@@ -15,6 +15,7 @@ namespace BoardGame.Levels.EditorTools
 
             EditorGUILayout.LabelField("Tamaño", blueprint.Width + " x " + blueprint.Height);
             EditorGUILayout.LabelField("Celdas jugables", blueprint.CountPlayable().ToString());
+            EditorGUILayout.LabelField("Dados precolocados", blueprint.CountDice() + " en " + blueprint.CountCellsWithDice() + " celdas");
 
             serializedObject.Update();
             EditorGUILayout.PropertyField(serializedObject.FindProperty("baseStackLimit"));
