@@ -39,6 +39,85 @@ Aún me falta definir todos los sistemas y acciones que deben tener acceso al ta
 - También se va a aplicar con inyección de dependencia: una vez creados con la seed maestra, se inyectarán al controlador que los usará en el estado `RollingElements`.
 - Por último, también lo vimos en clase.
 
+# Entrega TP-3
+
+## Herramienta de edición de niveles
+
+### 1. Controles
+
+#### Crear y editar un nivel
+
+- Ir a **BoardGame > Level Editor**.
+- Presionar el botón **Nuevo** y elegir dónde guardar el archivo `.asset`.
+  - Ejemplo: `Assets/BoardGame/Levels/Level_01.asset`.
+- Como alternativa, hacer clic derecho en la ventana **Project** y seleccionar:
+  `Create > BoardGame > Level Blueprint`.
+- Hacer doble clic sobre un Blueprint en la ventana **Project** para abrirlo en el editor.
+
+#### Herramientas (panel derecho)
+
+| Herramienta | Qué hace |
+|---|---|
+| **Jugable** | Pinta celdas como parte del nivel (clic o arrastrar). |
+| **No jugable** | Las saca de la forma del nivel (se les quita el efecto). |
+| **Efecto** | Pinta el efecto elegido en la paleta, con los parámetros del pincel. |
+| **Quitar efecto** | Deja la celda sin efecto. |
+| **Dados** | Pinta dados precolocados (ver sección 8). |
+| **Quitar dados** | Vacía los dados de la celda. |
+| **Inspeccionar** | Selecciona una celda y permite editar su jugabilidad, efecto, dados y parámetros. |
+
+#### Otras opciones
+
+- **Ancho / Alto + Aplicar tamaño:** redimensiona el nivel conservando las celdas existentes. Si se reduce el tamaño, solicita confirmación.
+- **Límite de stack base:** configura el `baseStackLimit` que recibe el Board.
+- **Acciones rápidas:**
+  - Todo jugable.
+  - Todo no jugable.
+  - Quitar todos los efectos.
+- **Deshacer / Rehacer:** `Ctrl + Z` / `Ctrl + Y`. Un arrastre completo cuenta como una sola acción.
+- **Guardar:** fuerza el guardado del asset. Unity también lo guarda con `Ctrl + S`.
+
+> **Importante:** La fila inferior de la grilla corresponde a `y = 0`, igual que en la escena.
+
+---
+
+### 2. Setup
+
+#### Objetos de la escena
+
+La jerarquía de la escena debe tener la siguiente estructura:
+
+```text
+Scene
+├── Main Camera      (Perspective o Orthographic; ver abajo)
+├── Directional Light
+└── Board            ← GameObject vacío con el componente BoardView
+    └── Cells        ← Se genera automáticamente al dar Play
+```
+
+#### Configuración de BoardView
+
+En el **Inspector**, dentro del componente `BoardView`, asignar:
+
+| Campo | Descripción |
+|---|---|
+| **Blueprint** | Archivo `.asset` correspondiente al nivel. |
+| **Cell Prefab** | Prefab de la celda. |
+| **Die View Prefab (opcional)** | Prefab del dado. Sin él, los dados existen en el modelo, pero no se dibujan. |
+| **Plane** | `XZ` (tablero acostado). La coordenada `y` de la grilla pasa a ser `Z` en el mundo. |
+| **Fit Camera (opcional)** | Asignar la `Main Camera` para que encuadre el tablero automáticamente. |
+| **Cell Size / Cell Gap** | Configuran el tamaño y la separación visual de las celdas. |
+
+#### Construcción del tablero
+
+Al presionar **Play**:
+
+1. Se construye el Board (modelo).
+2. Se dibuja una celda por cada celda jugable.
+3. Cada celda se colorea según el efecto que tenga asignado.
+
+También es posible utilizar las opciones **Build / Clear** desde el menú contextual del componente `BoardView` (clic derecho sobre el componente en el **Inspector**), sin necesidad de entrar en Play Mode.
+
 
 
 
